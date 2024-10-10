@@ -10,6 +10,7 @@ services:
       - mongo
     networks:
       - ecommerce-network
+    replicas: 2
 
   shopping-cart-service:
     build: ./shopping-cart-service
@@ -22,6 +23,7 @@ services:
       - mongo
     networks:
       - ecommerce-network
+    replicas: 2
 
   product-service:
     build: ./product-service
@@ -34,6 +36,7 @@ services:
       - mongo
     networks:
       - ecommerce-network
+    replicas: 2
 
   order-service:
     build: ./order-service
@@ -46,6 +49,7 @@ services:
       - mongo
     networks:
       - ecommerce-network
+    replicas: 2
   
   payment-service:
     build: ./payment-service
@@ -59,6 +63,7 @@ services:
       - mongo
     networks:
       - ecommerce-network
+    replicas: 2
     
   notification-service:
     build: ./notification-service
@@ -70,6 +75,21 @@ services:
       - mongo
     networks:
       - ecommerce-network
+  
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - ecommerce-network
+    depends_on:
+      - user-service
+      - product-service
+      - shopping-cart-service
+      - order-service
+      - payment-service
 
   mongo:
     image: mongo
